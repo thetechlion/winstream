@@ -6,7 +6,7 @@ separate Edge app. You sign in with your own accounts, and sign-ins are
 remembered between launches.
 
 Services: Netflix, Disney+, Peacock, Prime Video, HBO Max, Hulu.
-
+### If installing via the .exe installer, Windows SmartScreen may give a warning. This does NOT mean that it contains a virus, its just because it's not signed. You can safely bypass the warning.
 ## Requirements
 - Windows 10/11
 - .NET 8 SDK (https://dotnet.microsoft.com/download)
