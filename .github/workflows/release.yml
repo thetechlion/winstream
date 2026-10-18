@@ -1,0 +1,39 @@
+name: Release
+
+# Publish a release by pushing a tag like v1.0.1:
+#   git tag v1.0.1
+#   git push origin v1.0.1
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: ver
+        shell: bash
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Publish
+        run: dotnet publish WinStream.csproj -c Release -r win-x64 --self-contained true -p:Version=${{ steps.ver.outputs.version }} -o publish
+
+      - name: Pack and upload with Velopack
+        run: |
+          dotnet tool install -g vpk
+          vpk download github --repoUrl https://github.com/${{ github.repository }}
+          vpk pack -u WinStream -v ${{ steps.ver.outputs.version }} -p publish -e WinStream.exe
+          vpk upload github --repoUrl https://github.com/${{ github.repository }} --publish --releaseName "WinStream ${{ steps.ver.outputs.version }}" --tag v${{ steps.ver.outputs.version }} --token ${{ secrets.GITHUB_TOKEN }}

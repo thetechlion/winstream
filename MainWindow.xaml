@@ -1,0 +1,120 @@
+<Window x:Class="WinStream.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        Title="WinStream" Height="800" Width="1280"
+        MinHeight="500" MinWidth="800"
+        Background="#0B0B10"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <!-- Tiny flat home button -->
+        <Style x:Key="HomeButton" TargetType="Button">
+            <Setter Property="Width" Value="26" />
+            <Setter Property="Height" Value="26" />
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="#C9C9D3" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="ToolTip" Value="Home" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#2A2A35" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Service tile -->
+        <Style x:Key="Tile" TargetType="Button">
+            <Setter Property="Margin" Value="12" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="28" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                CornerRadius="16" BorderBrush="#33FFFFFF" BorderThickness="1"
+                                RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                            </Border.RenderTransform>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="1.03" ScaleY="1.03" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#99FFFFFF" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Top bar: tiny home button in the top-left corner -->
+        <Border x:Name="TopBar" Grid.Row="0" Background="#0B0B10" Height="30">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0,0,0">
+                <Button x:Name="HomeButton" Style="{StaticResource HomeButton}"
+                        Content="&#xE80F;" Click="Home_Click" />
+            </StackPanel>
+        </Border>
+
+        <!-- Launcher -->
+        <Grid x:Name="Launcher" Grid.Row="1" Margin="40,10,40,40">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,10,0,24">
+                <TextBlock Text="WinStream" Foreground="White" FontSize="44" FontWeight="Bold"
+                           HorizontalAlignment="Center" />
+                <TextBlock Text="Pick a service. Sign in with your own account." Foreground="#8E8EA0"
+                           FontSize="15" HorizontalAlignment="Center" Margin="0,4,0,0" />
+            </StackPanel>
+
+            <UniformGrid Grid.Row="1" Columns="3" Rows="2" MaxWidth="1100" MaxHeight="520">
+                <Button Style="{StaticResource Tile}" Background="#B20710" Content="Netflix"
+                        Tag="https://www.netflix.com/browse" Click="Tile_Click" />
+                <Button Style="{StaticResource Tile}" Background="#113CCF" Content="Disney+"
+                        Tag="https://www.disneyplus.com/profiles/select" Click="Tile_Click" />
+                <Button Style="{StaticResource Tile}" Background="#1B1B22" Content="Peacock"
+                        Tag="https://www.peacocktv.com/start" Click="Tile_Click" />
+                <Button Style="{StaticResource Tile}" Background="#0E7CA3" Content="Prime Video"
+                        Tag="https://www.amazon.com/gp/video/profiles" Click="Tile_Click" />
+                <Button Style="{StaticResource Tile}" Background="#5822B4" Content="HBO Max"
+                        Tag="https://auth.hbomax.com/login" Click="Tile_Click" />
+                <Button Style="{StaticResource Tile}" Background="#12A15E" Content="Hulu"
+                        Tag="https://auth.hulu.com/web/login" Click="Tile_Click" />
+            </UniformGrid>
+        </Grid>
+
+        <!-- Embedded Edge (WebView2) -->
+        <wv2:WebView2 x:Name="Browser" Grid.Row="1" Visibility="Collapsed" />
+    </Grid>
+</Window>
